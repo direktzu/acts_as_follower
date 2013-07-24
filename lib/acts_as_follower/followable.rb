@@ -60,12 +60,12 @@ module ActsAsFollower #:nodoc:
       end
 
       # Returns the following records.
-      def followers(options={})
-        self.followings.unblocked.includes(:follower).all(options).collect{|f| f.follower}
+      def followers
+        self.followings.unblocked.includes(:follower).collect{|f| f.follower}
       end
 
-      def blocks(options={})
-        self.followings.blocked.includes(:follower).all(options).collect{|f| f.follower}
+      def blocks
+        self.followings.blocked.includes(:follower).collect{|f| f.follower}
       end
 
       # Returns true if the current instance is followed by the passed record

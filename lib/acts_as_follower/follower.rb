@@ -29,7 +29,7 @@ module ActsAsFollower #:nodoc:
       # Does not allow duplicate records to be created.
       def follow(followable)
         if self != followable
-          self.follows.find_or_create_by_followable_id_and_followable_type(followable.id, parent_class_name(followable))
+          self.follows.find_or_create_by(followable_id: followable.id, followable_type: parent_class_name(followable))
         end
       end
 
@@ -41,18 +41,18 @@ module ActsAsFollower #:nodoc:
       end
 
       # Returns the follow records related to this instance by type.
-      def follows_by_type(followable_type, options={})
-        self.follows.unblocked.includes(:followable).for_followable_type(followable_type).all(options)
+      def follows_by_type(followable_type)
+        self.follows.unblocked.includes(:followable).for_followable_type(followable_type)
       end
 
       # Returns the follow records related to this instance with the followable included.
-      def all_follows(options={})
-        self.follows.unblocked.includes(:followable).all(options)
+      def all_follows
+        self.follows.unblocked.includes(:followable)
       end
 
       # Returns the actual records which this instance is following.
-      def all_following(options={})
-        all_follows(options).collect{ |f| f.followable }
+      def all_following
+        all_follows.collect{ |f| f.followable }
       end
 
       # Returns the actual records of a particular type which this record is following.
